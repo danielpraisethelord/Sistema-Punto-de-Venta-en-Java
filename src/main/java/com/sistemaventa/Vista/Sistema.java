@@ -20,6 +20,9 @@ import com.sistemaventa.modelo.Productos;
 import com.sistemaventa.modelo.ProductosDao;
 import com.sistemaventa.modelo.Proveedor;
 import com.sistemaventa.modelo.ProveedorDao;
+import com.sistemaventa.modelo.Venta;
+import com.sistemaventa.modelo.VentaDAO;
+
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 /**
  *
@@ -38,6 +41,8 @@ public class Sistema extends javax.swing.JFrame {
     Productos pro = new Productos();
     ProductosDao proDao = new ProductosDao();
     DefaultTableModel modelo = new DefaultTableModel();
+    Venta v = new Venta();
+    VentaDAO vDAO = new VentaDAO();
     int item;
     double totalaPagar = 0.00;
 
@@ -195,6 +200,7 @@ public class Sistema extends javax.swing.JFrame {
         btnProductos = new javax.swing.JButton();
         btnVentas = new javax.swing.JButton();
         btnConfig = new javax.swing.JButton();
+        labelVendedor = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel2 = new javax.swing.JPanel();
@@ -856,6 +862,8 @@ public class Sistema extends javax.swing.JFrame {
         btnConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/sistemaventa/Img/config.png"))); // NOI18N
         btnConfig.setText("Config");
 
+        labelVendedor.setText("Momos Corp");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -873,13 +881,19 @@ public class Sistema extends javax.swing.JFrame {
                 .addContainerGap(32, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(23, 23, 23))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(120, 120, 120)
+                .addComponent(labelVendedor)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(37, 37, 37)
                 .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 83, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 61, Short.MAX_VALUE)
+                .addComponent(labelVendedor)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btnNuevaVenta)
                 .addGap(18, 18, 18)
                 .addComponent(btnClientes)
@@ -2020,6 +2034,7 @@ public class Sistema extends javax.swing.JFrame {
 
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnGenerarVentaActionPerformed
         // TODO add your handling code here:
+        RegistrarVenta();
     }// GEN-LAST:event_btnGenerarVentaActionPerformed
 
     private void btnActualizarProveedorActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnActualizarProveedorActionPerformed
@@ -2265,6 +2280,15 @@ public class Sistema extends javax.swing.JFrame {
         txtPrecioVenta.setText("");
     }
 
+    private void RegistrarVenta () {
+        String cliente = txtNombreClienteVenta.getText();
+        String vendedor = labelVendedor.getText();
+        double monto = totalaPagar;
+        v.setCliente(cliente);
+        v.setVendedor(vendedor);
+        v.setTotal(monto);
+        vDAO.RegistrarVenta(v);
+    }
 
     /**
      * @param args the command line arguments
@@ -2450,6 +2474,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField46;
     private javax.swing.JTextField jTextField47;
     private javax.swing.JLabel labelTotalVenta;
+    private javax.swing.JLabel labelVendedor;
     private javax.swing.JTable tableCliente;
     private javax.swing.JTable tableProducto;
     private javax.swing.JTable tableProveedor;
