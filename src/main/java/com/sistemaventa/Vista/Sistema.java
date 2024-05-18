@@ -42,6 +42,7 @@ public class Sistema extends javax.swing.JFrame {
     Productos pro = new Productos();
     ProductosDao proDao = new ProductosDao();
     DefaultTableModel modelo = new DefaultTableModel();
+    DefaultTableModel tmp = new DefaultTableModel();
     Venta v = new Venta();
     VentaDAO vDAO = new VentaDAO();
     Detalle dV = new Detalle();
@@ -57,7 +58,7 @@ public class Sistema extends javax.swing.JFrame {
         txtIdProveedor.setVisible(false);
         AutoCompleteDecorator.decorate(cbxProveedorProducto);
         prDao.ConsultarProveedor(cbxProveedorProducto);
-
+        
     }
 
     public void ListarCliente() {
@@ -1892,7 +1893,7 @@ public class Sistema extends javax.swing.JFrame {
                 int stock = Integer.parseInt(txtStockDisponibleVenta.getText());
                 if (stock >= cant){
                     item = item + 1;
-                    DefaultTableModel tmp = (DefaultTableModel) tableVenta.getModel();
+                    tmp = (DefaultTableModel) tableVenta.getModel();
                     for (int i = 0; i < tableVenta.getRowCount(); i++){
                         if (tableVenta.getValueAt(i, 1).equals(txtDescripcionVenta.getText())) {
                             JOptionPane.showMessageDialog(null,"El producto ya esta registrado");
@@ -2040,6 +2041,9 @@ public class Sistema extends javax.swing.JFrame {
         // TODO add your handling code here:
         RegistrarVenta();
         registrarDetalle();
+        actulizarStock();
+        limpiarTableVenta();
+        limpiarClienteVenta();
     }// GEN-LAST:event_btnGenerarVentaActionPerformed
 
     private void btnActualizarProveedorActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnActualizarProveedorActionPerformed
@@ -2311,6 +2315,32 @@ public class Sistema extends javax.swing.JFrame {
         }
     }
 
+    private void actulizarStock () {
+        for (int i = 0; i < tableVenta.getRowCount(); i++) {
+            String cod = tableVenta.getValueAt(i, 0).toString();
+            int cant = Integer.parseInt(tableVenta.getValueAt(i, 2).toString());
+            pro = proDao.BuscarPro(cod);
+            int stockActual = pro.getStock() - cant;
+            vDAO.actualizarStock(stockActual, cod);
+        }
+    }
+
+    private void limpiarTableVenta() {
+        tmp = (DefaultTableModel) tableVenta.getModel();
+        int fila = tableVenta.getRowCount();
+        
+        for (int i = 0; i < fila; i++) {
+            tmp.removeRow(0);
+        }
+    }
+
+    private void limpiarClienteVenta () {
+        txtDniVenta.setText("");
+        txtNombreClienteVenta.setText("");
+        txtTelefonoClienteVenta.setText("");
+        txtDireccionClienteVenta.setText("");
+        txtRazonClienteVenta.setText("");
+    }
     /**
      * @param args the command line arguments
      */
