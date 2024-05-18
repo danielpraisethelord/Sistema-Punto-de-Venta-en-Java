@@ -5,6 +5,7 @@
 package com.sistemaventa.Vista;
 
 import java.util.List;
+import java.util.concurrent.Phaser;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
@@ -22,6 +23,8 @@ import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.sistemaventa.Reportes.Excel;
@@ -72,7 +75,7 @@ public class Sistema extends javax.swing.JFrame {
         txtIdProveedor.setVisible(false);
         AutoCompleteDecorator.decorate(cbxProveedorProducto);
         prDao.ConsultarProveedor(cbxProveedorProducto);
-        pdf();
+
     }
 
     public void ListarCliente() {
@@ -2056,6 +2059,7 @@ public class Sistema extends javax.swing.JFrame {
         RegistrarVenta();
         registrarDetalle();
         actulizarStock();
+        pdf();  
         limpiarTableVenta();
         limpiarClienteVenta();
     }// GEN-LAST:event_btnGenerarVentaActionPerformed
@@ -2392,6 +2396,73 @@ public class Sistema extends javax.swing.JFrame {
                                 "\nTelefono: " + tel + "\nDireccion: " + direccion + "\nRazon: " + ra);
             encabezado.addCell(fecha);
             document.add(encabezado);
+
+            Paragraph cli = new Paragraph();
+            cli.add(Chunk.NEWLINE);
+            cli.add("Datos de los clientes"+"\n\n");
+            document.add(cli);
+
+            PdfPTable tablacli = new PdfPTable(4);
+            tablacli.setWidthPercentage(100);
+            tablacli.getDefaultCell().setBorder(0);
+            float[] columnaCli = new float[] {20f, 50f, 30f, 40f};
+            tablacli.setWidths(columnaCli);
+            tablacli.setHorizontalAlignment(Element.ALIGN_LEFT);
+            PdfPCell cl1 = new PdfPCell(new Phrase("Dni/Ruc", negrita));
+            PdfPCell cl2 = new PdfPCell(new Phrase("Nombre", negrita));
+            PdfPCell cl3 = new PdfPCell(new Phrase("Telefono", negrita));
+            PdfPCell cl4 = new PdfPCell(new Phrase("Dirección", negrita));
+            cl1.setBorder(0);
+            cl2.setBorder(0);
+            cl3.setBorder(0);
+            cl4.setBorder(0);
+            tablacli.addCell(cl1);
+            tablacli.addCell(cl2);
+            tablacli.addCell(cl3);
+            tablacli.addCell(cl4);
+            tablacli.addCell(txtDniVenta.getText());
+            tablacli.addCell(txtNombreClienteVenta.getText());
+            tablacli.addCell(txtTelefonoClienteVenta.getText());
+            tablacli.addCell(txtDireccionClienteVenta.getText());
+
+            document.add(tablacli);
+
+            //PRODUCTOS
+            PdfPTable tablaPro = new PdfPTable(4);
+            tablaPro.setWidthPercentage(100);
+            tablaPro.getDefaultCell().setBorder(0);
+            float[] columnaPro = new float[] {10f, 50f, 15f, 20f};
+            tablaPro.setWidths(columnaPro);
+            tablaPro.setHorizontalAlignment(Element.ALIGN_LEFT);
+            PdfPCell pro1 = new PdfPCell(new Phrase("Cantidad", negrita));
+            PdfPCell pro2 = new PdfPCell(new Phrase("Descripción", negrita));
+            PdfPCell pro3 = new PdfPCell(new Phrase("Precio U.", negrita));
+            PdfPCell pro4 = new PdfPCell(new Phrase("Precio Total", negrita));
+            pro1.setBorder(0);
+            pro2.setBorder(0);
+            pro3.setBorder(0);
+            pro4.setBorder(0);
+            pro1.setBackgroundColor(BaseColor.DARK_GRAY);
+            pro2.setBackgroundColor(BaseColor.DARK_GRAY);
+            pro3.setBackgroundColor(BaseColor.DARK_GRAY);
+            pro4.setBackgroundColor(BaseColor.DARK_GRAY);
+            tablaPro.addCell(pro1);
+            tablaPro.addCell(pro2);
+            tablaPro.addCell(pro3);
+            tablaPro.addCell(pro4);
+            for (int i = 0; i < tableVenta.getRowCount(); i++) {
+                String cant = tableVenta.getValueAt(i, 2).toString();
+                String producto = tableVenta.getValueAt(i, 1).toString();
+                String precio = tableVenta.getValueAt(i, 3).toString();
+                String total = tableVenta.getValueAt(i, 4).toString();
+                tablaPro.addCell(cant);
+                tablaPro.addCell(producto);
+                tablaPro.addCell(precio);
+                tablaPro.addCell(total);
+            }
+            document.add(tablaPro);
+
+
 
             document.close();
         } catch (Exception e) {
