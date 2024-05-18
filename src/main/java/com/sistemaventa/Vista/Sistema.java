@@ -52,6 +52,9 @@ public class Sistema extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         txtIdCliente.setVisible(false);
+        txtIdVenta.setVisible(false);
+        txtIdProducto.setVisible(false);
+        txtIdProveedor.setVisible(false);
         AutoCompleteDecorator.decorate(cbxProveedorProducto);
         prDao.ConsultarProveedor(cbxProveedorProducto);
 
@@ -1889,7 +1892,7 @@ public class Sistema extends javax.swing.JFrame {
                 int stock = Integer.parseInt(txtStockDisponibleVenta.getText());
                 if (stock >= cant){
                     item = item + 1;
-                    modelo = (DefaultTableModel) tableVenta.getModel();
+                    DefaultTableModel tmp = (DefaultTableModel) tableVenta.getModel();
                     for (int i = 0; i < tableVenta.getRowCount(); i++){
                         if (tableVenta.getValueAt(i, 1).equals(txtDescripcionVenta.getText())) {
                             JOptionPane.showMessageDialog(null,"El producto ya esta registrado");
@@ -1909,8 +1912,8 @@ public class Sistema extends javax.swing.JFrame {
                     o[2] = lista.get(3);
                     o[3] = lista.get(4);
                     o[4] = lista.get(5);
-                    modelo.addRow(o);
-                    tableVenta.setModel(modelo);
+                    tmp.addRow(o);
+                    tableVenta.setModel(tmp);
                     totalPagar();
                     limpiarVenta();
                     txtCodigoVenta.requestFocus();
@@ -1953,7 +1956,6 @@ public class Sistema extends javax.swing.JFrame {
 
     private void btnNuevaVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaVentaActionPerformed
         // TODO add your handling code here:
-        LimpiarTable();
         jTabbedPane1.setSelectedIndex(0);
     }//GEN-LAST:event_btnNuevaVentaActionPerformed
 
@@ -2281,6 +2283,7 @@ public class Sistema extends javax.swing.JFrame {
         txtCantidadVenta.setText("");
         txtStockDisponibleVenta.setText("");
         txtPrecioVenta.setText("");
+        txtIdVenta.setText("");
     }
 
     private void RegistrarVenta () {
@@ -2294,13 +2297,12 @@ public class Sistema extends javax.swing.JFrame {
     }
 
     private void registrarDetalle() {
+        int id = vDAO.idVenta();
         for (int i = 0; i < tableVenta.getRowCount(); i++) {
             String cod = tableVenta.getValueAt(i, 0).toString();
             int cant = Integer.parseInt(tableVenta.getValueAt(i,2).toString());
             double precio = Double.parseDouble(tableVenta.getValueAt(i, 3).toString());
             
-            int id = 1;
-
             dV.setCodProd(cod);
             dV.setCantidad(cant);
             dV.setPrecio(precio);
