@@ -23,7 +23,38 @@ public class VentaDAO {
         } catch (SQLException e) {
             // TODO: handle exception
             System.out.println(e.toString());
+        } finally {
+            try {
+                con.close();           
+            } catch (SQLException e) {
+                // TODO: handle exception
+                System.out.println(e.toString());
+            }
         }
+        return r;
+    }
+
+    public int registrarDetalle (Detalle dV) {
+        String SQL = "INSERT INTO detalle (cod_producto, cantidad, precio, id_venta) VALUES (?,?,?,?)";
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(SQL);
+            ps.setString(1, dV.getCodProd());
+            ps.setInt(2, dV.getCantidad());
+            ps.setDouble(3, dV.getPrecio());
+            ps.setInt(4, dV.getId());
+            ps.execute();
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        } finally {
+            try {
+                con.close();           
+            } catch (SQLException e) {
+                // TODO: handle exception
+                System.out.println(e.toString());
+            }
+        }
+
         return r;
     }
 }

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import com.sistemaventa.Reportes.Excel;
 import com.sistemaventa.modelo.Cliente;
 import com.sistemaventa.modelo.ClienteDao;
+import com.sistemaventa.modelo.Detalle;
 import com.sistemaventa.modelo.Productos;
 import com.sistemaventa.modelo.ProductosDao;
 import com.sistemaventa.modelo.Proveedor;
@@ -43,6 +44,7 @@ public class Sistema extends javax.swing.JFrame {
     DefaultTableModel modelo = new DefaultTableModel();
     Venta v = new Venta();
     VentaDAO vDAO = new VentaDAO();
+    Detalle dV = new Detalle();
     int item;
     double totalaPagar = 0.00;
 
@@ -2035,6 +2037,7 @@ public class Sistema extends javax.swing.JFrame {
     private void btnGenerarVentaActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnGenerarVentaActionPerformed
         // TODO add your handling code here:
         RegistrarVenta();
+        registrarDetalle();
     }// GEN-LAST:event_btnGenerarVentaActionPerformed
 
     private void btnActualizarProveedorActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_btnActualizarProveedorActionPerformed
@@ -2288,6 +2291,22 @@ public class Sistema extends javax.swing.JFrame {
         v.setVendedor(vendedor);
         v.setTotal(monto);
         vDAO.RegistrarVenta(v);
+    }
+
+    private void registrarDetalle() {
+        for (int i = 0; i < tableVenta.getRowCount(); i++) {
+            String cod = tableVenta.getValueAt(i, 0).toString();
+            int cant = Integer.parseInt(tableVenta.getValueAt(i,2).toString());
+            double precio = Double.parseDouble(tableVenta.getValueAt(i, 3).toString());
+            
+            int id = 1;
+
+            dV.setCodProd(cod);
+            dV.setCantidad(cant);
+            dV.setPrecio(precio);
+            dV.setId(id);
+            vDAO.registrarDetalle(dV);
+        }
     }
 
     /**
