@@ -11,8 +11,19 @@ import javax.swing.JTabbedPane;
 import javax.swing.table.DefaultTableModel;
 
 import java.awt.event.KeyEvent;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.Date;
 
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Chunk;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.sistemaventa.Reportes.Excel;
 import com.sistemaventa.modelo.Cliente;
 import com.sistemaventa.modelo.ClienteDao;
@@ -23,6 +34,9 @@ import com.sistemaventa.modelo.Proveedor;
 import com.sistemaventa.modelo.ProveedorDao;
 import com.sistemaventa.modelo.Venta;
 import com.sistemaventa.modelo.VentaDAO;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
 /**
@@ -58,7 +72,7 @@ public class Sistema extends javax.swing.JFrame {
         txtIdProveedor.setVisible(false);
         AutoCompleteDecorator.decorate(cbxProveedorProducto);
         prDao.ConsultarProveedor(cbxProveedorProducto);
-        
+        pdf();
     }
 
     public void ListarCliente() {
@@ -2341,6 +2355,50 @@ public class Sistema extends javax.swing.JFrame {
         txtDireccionClienteVenta.setText("");
         txtRazonClienteVenta.setText("");
     }
+
+    private void pdf () {
+        try {
+            FileOutputStream archivo;
+            File file = new File ("src/main/java/com/sistemaventa/pdf/venta.pdf");
+            archivo = new FileOutputStream(file);
+            Document document = new Document();
+            PdfWriter.getInstance(document, archivo);
+            document.open();
+            Image img = Image.getInstance("src/main/java/com/sistemaventa/Img/momosCorp.jpg");
+            
+            Paragraph fecha = new Paragraph();
+            Font negrita = new Font(Font.FontFamily.TIMES_ROMAN, 12, Font.BOLD, BaseColor.BLUE);
+            fecha.add(Chunk.NEWLINE);
+            Date date = new Date();
+            fecha.add("Factura: 1\n" + "Fecha: " + new SimpleDateFormat("dd-mm-yyyy").format(date)+"\n\n");
+            
+            PdfPTable encabezado = new PdfPTable(4);
+            encabezado.setWidthPercentage(100);
+            encabezado.getDefaultCell().setBorder(0);
+            float[] columnaEncabezado = new float[] {20f, 30f, 70f, 40f};
+            encabezado.setWidths(columnaEncabezado);
+            encabezado.setHorizontalAlignment(Element.ALIGN_LEFT);
+            
+            encabezado.addCell(img);
+
+            String ruc = "213123123";
+            String nom = "PEDRITO";
+            String tel = "1231233";
+            String direccion = "CCCSDASD";
+            String ra = "RAZON";
+
+            encabezado.addCell("");
+            encabezado.addCell("Ruc: " + ruc + "\nNombre: " + nom +
+                                "\nTelefono: " + tel + "\nDireccion: " + direccion + "\nRazon: " + ra);
+            encabezado.addCell(fecha);
+            document.add(encabezado);
+
+            document.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * @param args the command line arguments
      */
