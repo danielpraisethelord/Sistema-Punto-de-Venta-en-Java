@@ -86,4 +86,21 @@ public class VentaDAO {
 
         return r;
     }
+
+    public boolean actualizarStock (int cant, String cod) {
+        String sql = "UPDATE productos SET stock = ? WHERE codigo = ?";
+
+        try {
+            con = cn.getConnection();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, cant);
+            ps.setString(2, cod);
+            ps.execute();
+            return true;
+        } catch (SQLException e) {
+            // TODO: handle exception
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
