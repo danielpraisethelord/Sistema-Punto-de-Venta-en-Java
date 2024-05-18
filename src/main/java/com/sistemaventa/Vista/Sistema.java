@@ -211,7 +211,7 @@ public class Sistema extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tableVenta = new javax.swing.JTable();
         txtStockDisponibleVenta = new javax.swing.JTextField();
-        jLabel8 = new javax.swing.JLabel();
+        txtRucVenta = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         txtDniVenta = new javax.swing.JTextField();
         txtNombreClienteVenta = new javax.swing.JTextField();
@@ -811,6 +811,11 @@ public class Sistema extends javax.swing.JFrame {
 
         btnNuevaVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/sistemaventa/Img/Nventa.png"))); // NOI18N
         btnNuevaVenta.setText("Nueva Venta");
+        btnNuevaVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnNuevaVentaActionPerformed(evt);
+            }
+        });
 
         btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/sistemaventa/Img/Clientes.png"))); // NOI18N
         btnClientes.setText("Clientes");
@@ -905,6 +910,11 @@ public class Sistema extends javax.swing.JFrame {
         jLabel7.setText("Stock Disponible");
 
         btnEliminarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/sistemaventa/Img/eliminar.png"))); // NOI18N
+        btnEliminarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarVentaActionPerformed(evt);
+            }
+        });
 
         txtCodigoVenta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
@@ -942,9 +952,15 @@ public class Sistema extends javax.swing.JFrame {
             }
         });
 
-        jLabel8.setText("DNI");
+        txtRucVenta.setText("DNI/RUC");
 
         jLabel9.setText("NOMBRE");
+
+        txtDniVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtDniVentaKeyPressed(evt);
+            }
+        });
 
         txtNombreClienteVenta.setEditable(false);
 
@@ -999,7 +1015,7 @@ public class Sistema extends javax.swing.JFrame {
                         .addContainerGap(8, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
+                            .addComponent(txtRucVenta)
                             .addComponent(txtDniVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1051,7 +1067,7 @@ public class Sistema extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
+                            .addComponent(txtRucVenta)
                             .addComponent(jLabel9))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1891,6 +1907,40 @@ public class Sistema extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_txtCantidadVentaKeyPressed
 
+    private void btnEliminarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarVentaActionPerformed
+        // TODO add your handling code here:
+        modelo = (DefaultTableModel) tableVenta.getModel();
+        modelo.removeRow(tableVenta.getSelectedRow());
+        totalPagar();
+        txtCodigoVenta.requestFocus();
+    }//GEN-LAST:event_btnEliminarVentaActionPerformed
+
+    private void txtDniVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDniVentaKeyPressed
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (!"".equals(txtDniVenta.getText())) {
+                int dni = Integer.parseInt(txtDniVenta.getText());
+                cl = client.buscarCliente(dni);
+
+                if (cl.getNombre() != null) {
+                    txtNombreClienteVenta.setText(""+cl.getNombre());
+                    txtTelefonoClienteVenta.setText(""+cl.getTelefono());
+                    txtDireccionClienteVenta.setText(""+cl.getDireccion());
+                    txtRazonClienteVenta.setText(""+cl.getRazon());
+                } else {
+                    txtDniVenta.setText("");
+                    JOptionPane.showMessageDialog(null,"El cliente no existe","Error",JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }//GEN-LAST:event_txtDniVentaKeyPressed
+
+    private void btnNuevaVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaVentaActionPerformed
+        // TODO add your handling code here:
+        LimpiarTable();
+        jTabbedPane1.setSelectedIndex(0);
+    }//GEN-LAST:event_btnNuevaVentaActionPerformed
+
    private void btnProveedorAncestorMoved(javax.swing.event.AncestorEvent evt) {                                       
         // TODO add your handling code here:
     }                                        
@@ -2344,7 +2394,6 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel56;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
@@ -2431,6 +2480,7 @@ public class Sistema extends javax.swing.JFrame {
     private javax.swing.JTextField txtRazonClienteVenta;
     private javax.swing.JTextField txtRazonProveedor;
     private javax.swing.JTextField txtRucProveedor;
+    private javax.swing.JLabel txtRucVenta;
     private javax.swing.JTextField txtStockDisponibleVenta;
     private javax.swing.JTextField txtTelefonoCliente;
     private javax.swing.JTextField txtTelefonoClienteVenta;
