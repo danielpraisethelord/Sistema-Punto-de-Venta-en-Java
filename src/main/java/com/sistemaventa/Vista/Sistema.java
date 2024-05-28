@@ -1767,8 +1767,8 @@ public class Sistema extends javax.swing.JFrame {
                     LimpiarTable();
                     ListarProveedor();
                     LimpiarProveedor();
-                    cbxProveedorProducto.removeAllItems(); // Elimina todos los elementos actuales
-                    prDao.ConsultarProveedor(cbxProveedorProducto); // Consulta y agrega los proveedores nuevamente
+                    cbxProveedorProducto.removeAllItems(); 
+                    prDao.ConsultarProveedor(cbxProveedorProducto); 
     
                 } 
         }

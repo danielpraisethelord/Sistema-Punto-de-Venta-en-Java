@@ -1,4 +1,4 @@
-package com.sistemaventa.modelo;
+    package com.sistemaventa.modelo;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,7 +46,7 @@ public class ClienteDao {
         try {
             con = cn.getConnection();
             if (con == null) {
-                return ListaCl; // Retorna una lista vacía si la conexión no se puede abrir
+                return ListaCl; 
             }
             ps = con.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -62,16 +62,7 @@ public class ClienteDao {
             }
         } catch (SQLException e) {
             System.out.println(e.toString());
-        } /*finally {
-            try {
-                if (rs != null) rs.close();
-                if (ps != null) ps.close();
-                if (con != null) con.close();
-            } catch (SQLException e) {
-                System.out.println(e.toString());
-            }
-        }*/
-    
+        } 
         return ListaCl;
     }
 
